@@ -82,7 +82,7 @@ class RayCasting:
             if depth_vert < depth_horz:
                 depth, texture = depth_vert, texture_vert
                 y_vert %= 1
-                offset = y_vert if cos_a > 0 else (1- y_vert)
+                offset = y_vert if cos_a > 0 else (1 - y_vert)
             else:
                 depth, texture = depth_horz, texture_horz
                 x_horz %= 1

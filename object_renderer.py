@@ -1,4 +1,3 @@
-from ast import Lambda
 import pygame as pg
 from settings import *
 
@@ -15,9 +14,6 @@ class ObjectRenderer:
                              for i in range(11)]
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
         self.game_over_image = self.get_texture('resources/textures/game_over.png', RES)
-
-        
-
 
     def draw(self):
         self.draw_background()

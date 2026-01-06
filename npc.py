@@ -27,7 +27,7 @@ class NPC(AnimatedSprite):
         self.get_sprite()
         self.run_logic()
     
-    def movment(self):
+    def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.game.player.map_pos)
         next_x, next_y = next_pos
 
@@ -97,12 +97,12 @@ class NPC(AnimatedSprite):
                     self.animate(self.attack_images)
                     self.attack()
                 else:
-                    self.animate(self.attack_images)
-                    self.movment()
+                    self.animate(self.walk_images)
+                    self.movement()
 
             elif self.player_search_trigger:
-                self.animate(self.attack_images)
-                self.movment()
+                self.animate(self.walk_images)
+                self.movement()
 
             else:
                 self.animate(self.idle_images)
@@ -149,30 +149,30 @@ class NPC(AnimatedSprite):
             y_horz += dy * 1.001
             depth_horz += delta_depth
 
-            # Vertical checks
-            x_vert, dx = (x_map + 1, 1) if cos_a > 0 else (x_map - EPSILON, -1)
-            depth_vert = (x_vert - ox) / (cos_a + 1e-6)
-            y_vert = oy + depth_vert * sin_a
+        # Vertical checks
+        x_vert, dx = (x_map + 1, 1) if cos_a > 0 else (x_map - EPSILON, -1)
+        depth_vert = (x_vert - ox) / (cos_a + 1e-6)
+        y_vert = oy + depth_vert * sin_a
 
-            delta_depth = dx / (cos_a + 1e-6)
-            dy = delta_depth * sin_a
+        delta_depth = dx / (cos_a + 1e-6)
+        dy = delta_depth * sin_a
 
-            for _ in range(MAX_DEPTH):
-                tile_vert = int(x_vert), int(y_vert)
-                if tile_vert == self.map_pos:
-                    player_dist_v = depth_vert
-                    break
-                if tile_vert in self.game.map.world_map:
-                    wall_dist_v = depth_vert
-                    break
-                x_vert += dx * 1.001
-                y_vert += dy * 1.001
-                depth_vert += delta_depth    
+        for _ in range(MAX_DEPTH):
+            tile_vert = int(x_vert), int(y_vert)
+            if tile_vert == self.map_pos:
+                player_dist_v = depth_vert
+                break
+            if tile_vert in self.game.map.world_map:
+                wall_dist_v = depth_vert
+                break
+            x_vert += dx * 1.001
+            y_vert += dy * 1.001
+            depth_vert += delta_depth
 
-            player_dist = max(player_dist_v, player_dist_h)
-            wall_dist =max(wall_dist_v, wall_dist_h)
+        player_dist = max(player_dist_v, player_dist_h)
+        wall_dist = max(wall_dist_v, wall_dist_h)
 
-            if 0 < player_dist < wall_dist or not wall_dist:
-                return True
+        if 0 < player_dist < wall_dist or not wall_dist:
+            return True
         return False
     
